@@ -1,1 +1,172 @@
+<#@ template debug="false" hostspecific="True" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="/Users/montraydavis/Projects/POMBuilder/POMBuilder/bin/Debug/net7.0/publish/Newtonsoft.Json.dll" #>
+<#@ import namespace="Newtonsoft.Json" #>
+<#@ import namespace="Newtonsoft.Json.Linq" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Collections" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.IO" #>
+<#@ output extension=".cs" #>
+<#
+var pomDir = "/Users/montraydavis/Projects/POMBuilder/POMBuilder/POM/";
+var dir = "/Users/montraydavis/Projects/POMBuilder/POMBuilder/bin/Debug/net7.0/";
+var x = JsonConvert.DeserializeObject<POM[]>(File.ReadAllText($"{dir}/POM.json"));
 
+var files = Directory.GetFiles(pomDir);
+
+foreach(var f in files){
+	File.Delete(f);
+}
+
+RecurseParse(x);
+
+#>
+
+<#
+void RecurseParse(POM[] pomDefinition, string oparentName = "")
+{
+	var parentName = oparentName ;
+	var prevName = "";
+	foreach(var pom in pomDefinition) { 
+	
+	#>  
+		using System;
+		using SecondaryServices.Automation;
+
+		<# 
+			if(string.IsNullOrWhiteSpace(oparentName)== false){
+		#>
+
+		public partial class <#= oparentName #> {
+		<#
+			} 
+		#>
+
+		public partial class <#= $"{pom.Name}".Trim('.') + (pom.Type == "Page" ? "Page" : string.Empty) #> : BasePage
+		{
+			#region Elements
+			<#
+			if(pom.Controls != null && pom.Controls.Length > 0
+				&& (pom.Type != "Element"))
+			{
+				var controls = pom.Controls; 
+
+				if(string.IsNullOrWhiteSpace(oparentName) == false) pom.Name = $"{oparentName}.{pom.Name}"; 
+
+				if(pom.Type != "Element")
+					SaveOutput($"{pom.Name}.cs".Trim('_'));
+				else
+					this.GenerationEnvironment.Clear();
+
+				RecurseParse(pom.Controls, pom.Name);
+			} 
+
+			if(pom.Controls!=null)
+			foreach(var control in pom.Controls)
+			{ #>
+			[CssSelector("<#= control.Selector #>"<#= control.Type != "Element" ? $", typeof({control.Name})" : ""  #>)]
+			public virtual <# if(control.Type=="Element"){ #> IWebElement <# } else { #><#= control.Name #> <# } #> <#= control.Name.Split('.').Last() #> { get; }
+
+		 <# }
+#>
+			#endregion
+<#
+
+			if(pom.Utils!=null)
+			foreach(var util in pom.Utils)
+			{ #>
+			
+				public <#= $"{pom.Name.Split('.').Last()}".Trim('.') + (pom.Type == "Page" ? "Page" : string.Empty) #> <#= util.Name #>(<#= util.Inputs.Any()? util.Inputs.Select(x=>x["Type"] + " " + x["Name"]).Aggregate((c,n) => c + "," + n) : "" #>)
+				{ 
+					<#
+
+					if(util.Actions!=null){
+						foreach(var action in util.Actions){
+							switch(action["Name"]){
+								case "Click":
+									#> this.<#= action["Selector"].Trim('$') #>.Click();
+<#
+									break;
+
+								case "SendKeys":
+									#> this.<#= action["Selector"].Trim('$') #>.SendKeys(<#= action["Value"].StartsWith("$") ? action["Value"].Trim('$') : "\"" + action["Value"]+ "\"" #>); 
+<#
+									break;
+							}
+						}
+					} 
+
+					#>
+
+					return this;
+				}
+		 <# }
+			#>
+		}
+
+		<# 
+			if(string.IsNullOrWhiteSpace(oparentName)== false){
+		#>
+
+		}
+
+		<#
+			}
+		#>
+
+<#
+	if(pom.Type != "Element")
+		SaveOutput($"{pom.Name}.cs".Trim('.'));
+	else
+		this.GenerationEnvironment.Clear();
+	}
+  //Uncomment following to write to separate folder 1,2,3
+  //SaveOutputToSubFolder(i.ToString(),"Content" + i.ToString() + ".txt");
+
+}
+#>
+<#+
+
+public class POMUtilDef
+{
+    public string Name { get; set; }
+    public List<Dictionary<string, string>> Inputs { get; }
+    public List<Dictionary<string, string>> Actions { get; }
+
+    public POMUtilDef()
+    {
+        this.Actions = new List<Dictionary<string, string>>();
+        this.Inputs = new List<Dictionary<string, string>>();
+    }
+}
+
+public class POM
+{
+    public string Type { get; set; }
+    public string Name { get; set; }
+    public string Selector { get; set; }
+    public POM[] Controls { get; set; }
+    public POMUtilDef[] Utils { get; set; }
+}
+
+string dir = "/Users/montraydavis/Projects/POMBuilder/POMBuilder";
+
+private void SaveOutput(string outputFileName) {
+
+  string templateDirectory = dir;
+  string outputFilePath = Path.Combine(templateDirectory + "/POM/", outputFileName);
+  File.AppendAllText(outputFilePath, this.GenerationEnvironment.ToString()); 
+  this.GenerationEnvironment.Clear();
+} 
+private void SaveOutputToSubFolder(string folderName, string outputFileName) {
+  string templateDirectory = dir;
+  string newDirectoryName = Path.Combine(templateDirectory,folderName);
+  if(!Directory.Exists(newDirectoryName))
+    Directory.CreateDirectory(newDirectoryName);
+  string outputFilePath = Path.Combine(newDirectoryName, outputFileName);
+  File.WriteAllText(outputFilePath, this.GenerationEnvironment.ToString()); 
+  //this.GenerationEnvironment.Clear();
+}
+#>
