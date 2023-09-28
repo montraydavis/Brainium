@@ -1,0 +1,80 @@
+[
+  {
+    "Type": "HedgePlatformBasePage",
+    "Name": "HedgeBasePage",
+    "Selector": "html",
+    "Controls": [
+      {
+        "Type": "LoginPage",
+        "Name": "Login",
+        "Selector": "hp-login",
+        "Controls": [
+          {
+            "Type": "Element",
+            "Name": "LoginInputField",
+            "Selector": "#signInName"
+          },
+          {
+            "Type": "Element",
+            "Name": "PasswordInputField",
+            "Selector": "#password"
+          },
+          {
+            "Type": "Element",
+            "Name": "LoginButton",
+            "Selector": "#next"
+          }
+        ],
+        "Utils": [
+          {
+            "Name": "LoginAs",
+            "Inputs": [
+              {
+                "Name": "username",
+                "Type": "string"
+              },
+              {
+                "Name": "password",
+                "Type": "string"
+              }
+            ],
+            "Actions": [
+              {
+                "Name": "SendKeys",
+                "Selector": "LoginInputField",
+                "Value": "$username"
+              },
+              {
+                "Name": "SendKeys",
+                "Selector": "PasswordInputField",
+                "Value": "$password"
+              },
+              {
+                "Name": "Click",
+                "Selector": "$LoginButton"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "Utils": [
+      {
+        "Name": "LoginAs",
+        "Inputs": [
+          {
+            "Name": "username",
+            "Type": "string"
+          },
+          {
+            "Name": "password",
+            "Type": "string"
+          }
+        ],
+        "Actions": [
+
+        ]
+      }
+    ]
+  }
+]
