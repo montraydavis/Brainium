@@ -275,3 +275,33 @@ The real power of GitHub Copilot lies in its application. This section presents 
      - Iteratively develop the component, utilizing Copilot for complex Angular features like data binding and service integration.
 
 1. Result: An interactive and visually appealing dashboard component, created with less hassle and more creativity, leveraging AI-driven code generation.
+
+---
+
+# Examples
+
+
+**Example 1: Database Integration**
+
+-   Inefficient: "I need C# code for database stuff."
+-   Improved: "Create a C# method for connecting to a SQL database that stores user budget data. The method should establish a connection using a connection string, handle any potential exceptions, and be reusable for different queries."
+
+**Example 2: User Input Validation**
+
+-   Inefficient: "Code for checking user input in C#."
+-   Improved: "Develop a C# function that validates user input for a budget entry. The function should accept parameters like expense amount and category, ensure the amount is a positive decimal, and the category is within a predefined list of acceptable categories."
+
+**Example 3: Monthly Budget Calculation**
+
+-   Inefficient: "C# code to calculate something."
+-   Improved: "Construct a C# function that calculates the total monthly expenses. It should take a list of expenses with dates and amounts, filter by the current month, and return the total sum."
+
+**Example 4: Visualization of Expenses**
+
+-   Inefficient: "How to make charts in C#?"
+-   Improved: "Generate a C# snippet for creating a bar chart that represents user expenses per category. The code should integrate with a .NET charting library and be able to take a dictionary with category names as keys and sums as values, plotting this data on the chart."
+
+**Example 5: Alert for Over-Budget Expenses**
+
+-   Inefficient: "Need a way to alert users in my app."
+-   Improved: "Design a C# method that checks if the total expenses exceed the user-defined budget limit. The method should accept total expenses and budget limit as parameters and return a custom alert message if the budget is exceeded."
