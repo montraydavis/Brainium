@@ -1,99 +1,100 @@
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Codelyzer.Analysis.Model;
 using System.Collections.Generic;
 using System.Linq;
 
-public static class ClassDependencySorter
+public class DependencySorter
 {
-    /// <summary>
-    /// Sorts class declarations by their dependency order.
-    /// </summary>
-    /// <param name="classes">The list of class declarations to sort.</param>
-    /// <param name="model">The semantic model for resolving type information.</param>
-    /// <returns>A sorted list of class declarations.</returns>
-    public static List<ClassDeclarationSyntax> SortByDependencyOrder(List<ClassDeclarationSyntax> classes, SemanticModel model)
+    private class Graph<T>
     {
-        var graph = new Dictionary<string, List<string>>();
-        var classNames = new HashSet<string>();
+        public Dictionary<T, List<T>> AdjacencyList = new();
 
-        // Build the graph
+        public void AddVertex(T vertex)
+        {
+            AdjacencyList[vertex] = new List<T>();
+        }
+
+        public void AddEdge(T from, T to)
+        {
+            if (AdjacencyList.ContainsKey(from))
+            {
+                AdjacencyList[from].Add(to);
+            }
+        }
+    }
+
+    public List<ClassDeclaration> SortByDependency(List<ClassDeclaration> classes, List<UsingDirective> usings)
+    {
+        var graph = new Graph<ClassDeclaration>();
+        var classByName = classes.ToDictionary(c => c.Identifier.Text, c => c);
+        var usingNames = usings.Select(u => u.Identifier.Text).ToHashSet();
+
         foreach (var cls in classes)
         {
-            var className = cls.Identifier.Text;
-            classNames.Add(className);
-            var dependencies = GetDependencies(cls, model);
+            graph.AddVertex(cls);
 
-            if (!graph.ContainsKey(className))
-            {
-                graph[className] = new List<string>();
-            }
+            AddEdgesForBaseTypes(cls, classByName, graph);
+            AddEdgesForUsings(cls, usingNames, classByName, graph);
+            AddEdgesForMethodBodies(cls, classByName, graph);
+        }
 
-            foreach (var dependency in dependencies)
+        return TopologicalSort(graph).ToList();
+    }
+
+    private void AddEdgesForBaseTypes(ClassDeclaration cls, Dictionary<string, ClassDeclaration> classByName, Graph<ClassDeclaration> graph)
+    {
+        if (cls.BaseList != null)
+        {
+            foreach (var baseType in cls.BaseList.BaseTypes)
             {
-                if (classNames.Contains(dependency) && dependency != className)
+                if (classByName.TryGetValue(baseType.Identifier.Text, out var baseClass))
                 {
-                    graph[className].Add(dependency);
+                    graph.AddEdge(cls, baseClass);
                 }
             }
         }
-
-        var sortedClasses = TopologicalSort(graph).Select(name => classes.First(c => c.Identifier.Text == name)).ToList();
-        return sortedClasses;
     }
 
-    /// <summary>
-    /// Performs a topological sort on the dependency graph.
-    /// </summary>
-    /// <param name="graph">The dependency graph.</param>
-    /// <returns>A list of class names sorted by dependency order.</returns>
-    private static List<string> TopologicalSort(Dictionary<string, List<string>> graph)
+    private void AddEdgesForUsings(ClassDeclaration cls, HashSet<string> usingNames, Dictionary<string, ClassDeclaration> classByName, Graph<ClassDeclaration> graph)
     {
-        var visited = new HashSet<string>();
-        var result = new List<string>();
-
-        foreach (var item in graph.Keys)
+        // Assuming direct class name matches for simplicity; may need namespace handling
+        foreach (var usingName in usingNames)
         {
-            TopologicalSortUtil(item, visited, result, graph);
+            if (classByName.TryGetValue(usingName, out var usedClass))
+            {
+                graph.AddEdge(cls, usedClass);
+            }
+        }
+    }
+
+    private void AddEdgesForMethodBodies(ClassDeclaration cls, Dictionary<string, ClassDeclaration> classByName, Graph<ClassDeclaration> graph)
+    {
+        // This is a simplified approach; actual implementation should parse method bodies
+        // to find class references. This requires a detailed analysis of the syntax tree.
+    }
+
+    private IEnumerable<ClassDeclaration> TopologicalSort(Graph<ClassDeclaration> graph)
+    {
+        var visited = new HashSet<ClassDeclaration>();
+        var result = new Stack<ClassDeclaration>();
+
+        foreach (var vertex in graph.AdjacencyList.Keys)
+        {
+            TopologicalSortUtil(vertex, visited, result, graph);
         }
 
-        result.Reverse();
         return result;
     }
 
-    private static void TopologicalSortUtil(string v, HashSet<string> visited, List<string> result, Dictionary<string, List<string>> graph)
+    private void TopologicalSortUtil(ClassDeclaration vertex, HashSet<ClassDeclaration> visited, Stack<ClassDeclaration> stack, Graph<ClassDeclaration> graph)
     {
-        if (!visited.Contains(v))
+        if (!visited.Contains(vertex))
         {
-            visited.Add(v);
-            foreach (var dep in graph[v])
+            visited.Add(vertex);
+            foreach (var neighbor in graph.AdjacencyList[vertex])
             {
-                TopologicalSortUtil(dep, visited, result, graph);
+                TopologicalSortUtil(neighbor, visited, stack, graph);
             }
-            result.Add(v);
+            stack.Push(vertex);
         }
-    }
-
-    /// <summary>
-    /// Gets the dependencies of a class declaration.
-    /// </summary>
-    /// <param name="cls">The class declaration.</param>
-    /// <param name="model">The semantic model for resolving type information.</param>
-    /// <returns>A list of dependency names.</returns>
-    private static List<string> GetDependencies(ClassDeclarationSyntax cls, SemanticModel model)
-    {
-        var dependencies = new List<string>();
-
-        // Add base types
-        var baseTypes = cls.BaseList?.Types.Select(bt => model.GetTypeInfo(bt.Type).Type?.Name).Where(n => n != null);
-        if (baseTypes != null)
-        {
-            dependencies.AddRange(baseTypes);
-        }
-
-        // Add types from method bodies, properties, etc.
-        // This part can be expanded based on specific needs, such as analyzing method bodies or property types.
-        // For simplicity, this example does not dive deep into method body analysis.
-
-        return dependencies.Distinct().ToList();
     }
 }
