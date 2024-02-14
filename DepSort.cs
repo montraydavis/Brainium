@@ -1,21 +1,25 @@
 using Codelyzer.Analysis.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 public class DependencySorter
 {
-    private class Graph<T>
+    private class Graph
     {
-        public Dictionary<T, List<T>> AdjacencyList = new();
+        public Dictionary<string, List<string>> AdjacencyList = new();
 
-        public void AddVertex(T vertex)
+        public void AddVertex(string vertex)
         {
-            AdjacencyList[vertex] = new List<T>();
+            if (!AdjacencyList.ContainsKey(vertex))
+            {
+                AdjacencyList[vertex] = new List<string>();
+            }
         }
 
-        public void AddEdge(T from, T to)
+        public void AddEdge(string from, string to)
         {
-            if (AdjacencyList.ContainsKey(from))
+            if (AdjacencyList.ContainsKey(from) && !AdjacencyList[from].Contains(to))
             {
                 AdjacencyList[from].Add(to);
             }
@@ -24,68 +28,67 @@ public class DependencySorter
 
     public List<ClassDeclaration> SortByDependency(List<ClassDeclaration> classes, List<UsingDirective> usings)
     {
-        var graph = new Graph<ClassDeclaration>();
+        var graph = new Graph();
         var classByName = classes.ToDictionary(c => c.Identifier.Text, c => c);
+        var classNames = classByName.Keys.ToHashSet();
         var usingNames = usings.Select(u => u.Identifier.Text).ToHashSet();
 
         foreach (var cls in classes)
         {
-            graph.AddVertex(cls);
+            var className = cls.Identifier.Text;
+            graph.AddVertex(className);
 
-            AddEdgesForBaseTypes(cls, classByName, graph);
-            AddEdgesForUsings(cls, usingNames, classByName, graph);
-            AddEdgesForMethodBodies(cls, classByName, graph);
+            AddEdgesForBaseTypes(cls, classNames, graph);
+            AddEdgesForUsings(cls, usingNames, classNames, graph);
+            // AddEdgesForMethodBodies can be implemented similarly, analyzing references within method bodies
         }
 
-        return TopologicalSort(graph).ToList();
+        var sortedClassNames = TopologicalSort(graph);
+        return sortedClassNames.Select(name => classByName[name]).ToList();
     }
 
-    private void AddEdgesForBaseTypes(ClassDeclaration cls, Dictionary<string, ClassDeclaration> classByName, Graph<ClassDeclaration> graph)
+    private void AddEdgesForBaseTypes(ClassDeclaration cls, HashSet<string> classNames, Graph graph)
     {
+        var className = cls.Identifier.Text;
         if (cls.BaseList != null)
         {
             foreach (var baseType in cls.BaseList.BaseTypes)
             {
-                if (classByName.TryGetValue(baseType.Identifier.Text, out var baseClass))
+                var baseTypeName = baseType.Identifier.Text;
+                if (classNames.Contains(baseTypeName))
                 {
-                    graph.AddEdge(cls, baseClass);
+                    graph.AddEdge(className, baseTypeName);
                 }
             }
         }
     }
 
-    private void AddEdgesForUsings(ClassDeclaration cls, HashSet<string> usingNames, Dictionary<string, ClassDeclaration> classByName, Graph<ClassDeclaration> graph)
+    private void AddEdgesForUsings(ClassDeclaration cls, HashSet<string> usingNames, HashSet<string> classNames, Graph graph)
     {
-        // Assuming direct class name matches for simplicity; may need namespace handling
+        var className = cls.Identifier.Text;
         foreach (var usingName in usingNames)
         {
-            if (classByName.TryGetValue(usingName, out var usedClass))
+            if (classNames.Contains(usingName) && usingName != className)
             {
-                graph.AddEdge(cls, usedClass);
+                graph.AddEdge(className, usingName);
             }
         }
     }
 
-    private void AddEdgesForMethodBodies(ClassDeclaration cls, Dictionary<string, ClassDeclaration> classByName, Graph<ClassDeclaration> graph)
+    private List<string> TopologicalSort(Graph graph)
     {
-        // This is a simplified approach; actual implementation should parse method bodies
-        // to find class references. This requires a detailed analysis of the syntax tree.
-    }
-
-    private IEnumerable<ClassDeclaration> TopologicalSort(Graph<ClassDeclaration> graph)
-    {
-        var visited = new HashSet<ClassDeclaration>();
-        var result = new Stack<ClassDeclaration>();
+        var visited = new HashSet<string>();
+        var stack = new Stack<string>();
 
         foreach (var vertex in graph.AdjacencyList.Keys)
         {
-            TopologicalSortUtil(vertex, visited, result, graph);
+            TopologicalSortUtil(vertex, visited, stack, graph);
         }
 
-        return result;
+        return stack.ToList();
     }
 
-    private void TopologicalSortUtil(ClassDeclaration vertex, HashSet<ClassDeclaration> visited, Stack<ClassDeclaration> stack, Graph<ClassDeclaration> graph)
+    private void TopologicalSortUtil(string vertex, HashSet<string> visited, Stack<string> stack, Graph graph)
     {
         if (!visited.Contains(vertex))
         {
