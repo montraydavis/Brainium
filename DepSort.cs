@@ -40,7 +40,7 @@ public class DependencySorter
 
             AddEdgesForBaseTypes(cls, classNames, graph);
             AddEdgesForUsings(cls, usingNames, classNames, graph);
-            // AddEdgesForMethodBodies can be implemented similarly, analyzing references within method bodies
+            AddEdgesForMethodBodies(cls, classNames, graph);
         }
 
         var sortedClassNames = TopologicalSort(graph);
@@ -73,6 +73,25 @@ public class DependencySorter
                 graph.AddEdge(className, usingName);
             }
         }
+    }
+
+    private void AddEdgesForMethodBodies(ClassDeclaration cls, HashSet<string> classNames, Graph graph)
+    {
+        var className = cls.Identifier.Text;
+        // Traverse all methods in the class
+        foreach (var method in cls.MethodDeclarations)
+        {
+            var methodBody = method.Block;
+            if (methodBody != null)
+            {
+                // This is a simplified approach. You need to implement a more detailed analysis
+                // to extract class references from the method body.
+                // For example, you might look for object creation expressions, method calls, etc.,
+                // that reference other classes in your list.
+            }
+        }
+        // Note: Actual implementation of class reference extraction from method bodies is omitted here.
+        // It requires parsing the syntax tree nodes within each method body.
     }
 
     private List<string> TopologicalSort(Graph graph)
