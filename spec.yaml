@@ -1,509 +1,391 @@
-$shared:
-- pattern: "**/api/user/platformCheck"
-  occurrences: 2
-  pages:
-  - clientSelectPage
-  - dashboardPage
-- pattern: "**/api/user/profile"
-  occurrences: 2
-  pages:
-  - clientSelectPage
-  - dashboardPage
-- pattern: "**/api/queries/clientConstant"
-  occurrences: 2
-  pages:
-  - dashboardPage
-  - gainLossRecon
-- pattern: "**/api/commands/jobs/status"
-  occurrences: 3
-  pages:
-  - dashboardPage
-  - positionRecon
-  - gainLossRecon
-- pattern: "**/api/queries/processlog"
-  occurrences: 2
-  pages:
-  - dashboardPage
-  - gainLossRecon
-- pattern: "**/api/queries/data-alerts/*"
-  occurrences: 2
-  pages:
-  - dashboardPage
-  - positionRecon
-loginPage:
-    - authorizeEndpoint: null
-  description: Endpoint for user authorization.
-  pattern: "**/oauth2/v2.0/authorize"
-clientSelectPage:
-    - apiConfiguration:
-        description: Endpoint for API configuration
-        pattern: "**/api/configuration"
-    - openIdConfiguration:
-        description: Endpoint for OpenID configuration
-        pattern: "**/b2c_1a_userworkflow/v2.0/.well-known/openid-configuration"
-    - apiUserPlatformCheck:
-        description: Endpoint for user platform check
-        pattern: "**/api/user/platformCheck"
-    - apiUserProfile:
-        description: Endpoint for user profile
-        pattern: "**/api/user/profile"
-    - apiUserGroupHierarchyAccess:
-        description: Endpoint for user group hierarchy access
-        pattern: "**/api/queries/user/grouphierarchyaccess"
-    - apiUserGroupHierarchyAccess:
-        description: Endpoint for user group hierarchy access
-        pattern: "**/api/queries/user/grouphierarchyaccess"
-dashboardPage:
-    - apiConfiguration:
-        description: Endpoint for API configuration
-        pattern: "**/api/configuration"
-    - apiUserPlatformCheck:
-        description: Endpoint for user platform check
-        pattern: "**/api/user/platformCheck"
-    - apiUserProfile:
-        description: Gets the user profile
-        pattern: "**/api/user/profile"
-    - apiQueriesClientConstant:
-        description: Gets client constants for the dashboard
-        pattern: "**/api/queries/clientConstant"
-    - apiCommandsJobsStatus:
-        description: API endpoint to check job status.
-        pattern: "**/api/commands/jobs/status"
-    - apiQueriesDashboardDayManager:
-        description: Gets the day manager dashboard data
-        pattern: "**/api/queries/dashboard/daymanager"
-    - apiQueriesRiskPosition:
-        description: Gets risk position data
-        pattern: "**/api/queries/riskposition"
-    - apiQueriesDashboardPositionPipeline:
-        description: Gets the position pipeline for the dashboard
-        pattern: "**/api/queries/dashboard/positionpipeline"
-    - apiQueriesDashboardMarketMovement:
-        description: Gets market movement data for the dashboard
-        pattern: "**/api/queries/dashboard/marketmovement"
-    - apiQueriesDashboardLoansForSale:
-        description: Gets loans for sale data
-        pattern: "**/api/queries/dashboard/loansforsale"
-    - apiQueriesCommitLoansActiveBidRequests:
-        description: Gets active bid requests for commit loans
-        pattern: "**/api/queries/commitloans/activebidrequests"
-    - apiQueriesDashboardLoanSalesRollingThirty:
-        description: Gets rolling thirty data for loan sales
-        pattern: "**/api/queries/dashboard/loansalesrollingthirty"
-    - apiQueriesDashboardRecentTrades:
-        description: Gets recent trades data for the dashboard
-        pattern: "**/api/queries/dashboard/recenttrades"
-    - apiQueriesDashboardLockVolume:
-        description: Gets lock volume data for the dashboard
-        pattern: "**/api/queries/dashboard/lockvolume"
-    - apiQueriesDashboardShockProfile:
-        description: Gets shock profile data for the dashboard
-        pattern: "**/api/queries/dashboard/shockprofile"
-    - apiQueriesDashboardLocks:
-        description: Gets locks data for the dashboard
-        pattern: "**/api/queries/dashboard/locks"
-    - apiQueriesDashboardFallout:
-        description: Gets fallout data for the dashboard
-        pattern: "**/api/queries/dashboard/fallout"
-    - apiQueriesDashboardLoanSaleSummary:
-        description: Gets loan sale summary data
-        pattern: "**/api/queries/dashboard/loansalesummary"
-    - apiQueriesProcIds:
-        description: Gets process IDs
-        pattern: "**/api/queries/procIds/*"
-    - apiQueriesProcessLog:
-        description: Gets process log
-        pattern: "**/api/queries/processlog"
-    - apiQueriesDataAlerts:
-        description: Gets data alerts
-        pattern: "**/api/queries/data-alerts/*"
-    - apiQueriesRiskPositionLastUpdate:
-        description: Gets the last update time for risk position
-        pattern: "**/api/queries/riskposition/lastupdate"
-positionRecon:
-    - apiQueriesPositionRecon:
-        description: Gets position recon data
-        pattern: "**/api/queries/positionrecon"
-    - apiCommandsJobsStatus:
-        description: API endpoint to check job status.
-        pattern: "**/api/commands/jobs/status"
-    - apiQueriesDataAlerts:
-        description: Gets data alerts
-        pattern: "**/api/queries/data-alerts/*"
+```json
+// {
+//     "loanDetail": {
+//         "primaryData": {
+//             "cCode": "Conf30",
+//             "amount": 290030.0,
+//             "noteRate": 7.125,
+//             "purpose": "Purchase",
+//             "fico": 759,
+//             "ltv": 97.0,
+//             "cltv": 97.0,
+//             "channel": "Retail",
+//             "propOcc": "Primary",
+//             "propType": "SFR",
+//             "propUnits": 1,
+//             "propState": "LA",
+//             "refiType": "N",
+//             "status": "Lock or loan excluded from risk position, Excluded by Query",
+//             "lastName": null,
+//             "cID": "20264700"
+//         },
+//         "supplementalData": {
+//             "lockDate": "2024-02-15T00:00:00",
+//             "lockExpDate": "2024-03-18T00:00:00",
+//             "estFundDate": "2024-04-23T00:00:00",
+//             "fundDate": "2024-03-07T00:00:00",
+//             "allocationDate": "2024-03-14T00:00:00",
+//             "purchasedDate": "2024-03-20T00:00:00",
+//             "dateShipped": null,
+//             "pgNumber": null,
+//             "lenderCost": 101.53200000000001,
+//             "lenderMargin": 1.192,
+//             "secondaryCost": 102.724
+//         },
+//         "status": {
+//             "historyRecords": [
+//                 {
+//                     "procId": 727404231,
+//                     "reconStatus": 22,
+//                     "reconStatusDesc": {
+//                         "name": "New Loan or Lock - Excluded",
+//                         "description": "New lock or loan, excluded from today's risk position"
+//                     },
+//                     "procStatus": -9,
+//                     "procStatusDesc": {
+//                         "name": "Lock or loan excluded from risk position, Excluded by Query",
+//                         "description": null
+//                     },
+//                     "price": null,
+//                     "gainLoss": null,
+//                     "valMethodID": "",
+//                     "coupon": null,
+//                     "rptCoupon": null,
+//                     "derivedSettleDate": null,
+//                     "durationRatio": null,
+//                     "coverFactor": null,
+//                     "productCode": "Conf30",
+//                     "noteRate": 7.125,
+//                     "amount": 290030.0,
+//                     "secondaryCost": 102.724,
+//                     "stage": "Completed",
+//                     "pgNumber": "100000221299",
+//                     "purchasedDate": "2024-03-20T00:00:00",
+//                     "lockDate": "2024-02-15T00:00:00",
+//                     "lockExpDate": "2024-03-18T00:00:00",
+//                     "procDate": "2024-04-23T00:00:00",
+//                     "formattedHistoryDate": "4/23/2024 Intraday"
+//                 },
+//                 {
+//                     "procId": 727404010,
+//                     "reconStatus": 14,
+//                     "reconStatusDesc": {
+//                         "name": "In Both - Allocated - MTT Again",
+//                         "description": "Lock or loan remains allocated to a commitment, marking to the commitment price"
+//                     },
+//                     "procStatus": 7,
+//                     "procStatusDesc": {
+//                         "name": "Closed loan, committed to investor, marking to client-provided price",
+//                         "description": null
+//                     },
+//                     "price": 103.031,
+//                     "gainLoss": 890.3921000000064,
+//                     "valMethodID": "AmerihomeBulk",
+//                     "coupon": 6.5,
+//                     "rptCoupon": 6.5,
+//                     "derivedSettleDate": "2024-03-21T13:22:00",
+//                     "durationRatio": 0.0,
+//                     "coverFactor": 1.0,
+//                     "productCode": "Conf30",
+//                     "noteRate": 7.125,
+//                     "amount": 290030.0,
+//                     "secondaryCost": 102.724,
+//                     "stage": "Completed",
+//                     "pgNumber": "100000221299",
+//                     "purchasedDate": "2024-03-20T00:00:00",
+//                     "lockDate": "2024-02-15T00:00:00",
+//                     "lockExpDate": "2024-03-18T00:00:00",
+//                     "procDate": "2024-04-01T00:00:00",
+//                     "formattedHistoryDate": "4/1/2024 EOD"
+//                 },
+//                 {
+//                     "procId": 727403010,
+//                     "reconStatus": 10,
+//                     "reconStatusDesc": {
+//                         "name": "In Both - Included Today",
+//                         "description": "Lock or loan is included in both today's position and yesterday's position"
+//                     },
+//                     "procStatus": 0,
+//                     "procStatusDesc": {
+//                         "name": "Unclosed, uncommitted lock, marking to market price",
+//                         "description": null
+//                     },
+//                     "price": 102.64066061859116,
+//                     "gainLoss": -241.7092079000822,
+//                     "valMethodID": "Fannie_Cash",
+//                     "coupon": 7.125,
+//                     "rptCoupon": 6.5,
+//                     "derivedSettleDate": "2024-03-14T00:00:00",
+//                     "durationRatio": 0.7208007916460413,
+//                     "coverFactor": 0.991666787628177,
+//                     "productCode": "Conf30",
+//                     "noteRate": 7.125,
+//                     "amount": 290030.0,
+//                     "secondaryCost": 102.724,
+//                     "stage": "Audit in Progress",
+//                     "pgNumber": null,
+//                     "purchasedDate": null,
+//                     "lockDate": "2024-02-15T00:00:00",
+//                     "lockExpDate": "2024-03-18T00:00:00",
+//                     "procDate": "2024-03-01T00:00:00",
+//                     "formattedHistoryDate": "3/1/2024 EOD"
+//                 }
+//             ]
+//         },
+//         "marginData": {
+//             "loanId": "20264700",
+//             "date": "2024-04-23T00:00:00",
+//             "lockDate": "2024-02-15T00:00:00",
+//             "lockExpirationDate": "2024-03-18T00:00:00",
+//             "valuationMethodId": "PennyBulk",
+//             "lenderCost": 101.53200000000001,
+//             "lenderMargin": 1.192,
+//             "secondaryCost": 102.724,
+//             "dayOnePrice": 102.61890303072096,
+//             "dayOneMSR": 0.0,
+//             "marginRecords": []
+//         },
+//         "pricingDetails": [],
+//         "shockRecords": [],
+//         "coverageData": {
+//             "cCode": "20264700",
+//             "amount": 290030.0,
+//             "noteRate": 7.125,
+//             "daysInStage": 0,
+//             "price": 0.0,
+//             "secondaryCost": 102.724,
+//             "glBps": -102.724,
+//             "coverFactor": 0.0,
+//             "loanDuration": 0.0,
+//             "benchmarkDuration": 0.0,
+//             "durationRatio": 0.0,
+//             "coupon": 0.0,
+//             "month": "",
+//             "hedgeWeightedLoanAmount": 0.0,
+//             "adjustors": [],
+//             "pullThroughGridModel": {
+//                 "topHeader": null,
+//                 "midHeader": null,
+//                 "bottomHeader": null,
+//                 "rowHeaders": null,
+//                 "pullThroughRecords": null
+//             }
+//         }
+//     },
+//     "referenceId": "b7cace94-95f8-43e0-b4a4-05c74a6b37b1"
+// }
 
-gainLossRecon:
-    - apiConfiguration:
-        description: "API Endpoint for configuration"
-        pattern: "**/api/configuration"
-    - apiUserPlatformCheck:
-        description: "API Endpoint for user platform check"
-        pattern: "**/api/user/platformCheck"
-    - apiUserProfile:
-        description: "API Endpoint to get user profile"
-        pattern: "**/api/user/profile"
-    - apiQueriesClientConstant:
-        description: "API Endpoint to get client constants for the gain/loss recon"
-        pattern: "**/api/queries/clientConstant"
-    - apiCommandsJobsStatus:
-        description: "API Endpoint to check job status."
-        pattern: "**/api/commands/jobs/status"
-    - apiSignalrNegotiate:
-        description: "API Endpoint for SignalR negotiation"
-        pattern: "**/api/signalr/negotiate"
-    - apiQueriesProcIdsWithItem:
-        description: "API Endpoint to get process IDs"
-        pattern: "**/api/queries/procIds/*"
-    - apiQueriesProcessLog:
-        description: "API Endpoint to get process log"
-        pattern: "**/api/queries/processlog"
-    - apiQueriesDataAlerts:
-        description: "API Endpoint to get data alerts"
-        pattern: "**/api/queries/data-alerts/*"
-    - apiQueriesGLRecon:
-        description: "API Endpoint to get gain/loss recon data"
-        pattern: "**/api/queries/glrecon"
-    - apiQueriesProcIdsWithItem:
-        description: "API Endpoint to get process IDs with item"
-        pattern: "**/api/queries/procIds/*"
-    - apiQueriesDataAlertsWithItem:
-        description: "API Endpoint to get data alerts with item"
-        pattern: "**/api/queries/data-alerts/*"
+```
 
 
-reconLoanDetailViewer:
-    - apiConfiguration:
-        description: "API Endpoint for configuration"
-        pattern: "**/api/configuration"
-    - apiUserPlatformCheck:
-        description: "API Endpoint for user platform check"
-        pattern: "**/api/user/platformCheckWithItem"
-    - apiUserProfile:
-        description: "API Endpoint to get user profile"
-        pattern: "**/api/user/profileWithItem"
-    - apiQueriesClientConstant:
-        description: "API Endpoint to get client constants"
-        pattern: "**/api/queries/clientConstantWithItem"
-    - apiCommandsJobsStatus:
-        description: "API Endpoint to check job status"
-        pattern: "**/api/commands/jobs/statusWithItem"
-    - apiSignalrNegotiate:
-        description: "API Endpoint for SignalR negotiation"
-        pattern: "**/api/signalr/negotiateWithItem"
-    - apiQueriesProcIds:
-        description: "API Endpoint to get process IDs"
-        pattern: "**/api/queries/procIdsWithItem/*"
-    - apiQueriesProcessLog:
-        description: "API Endpoint to get process log"
-        pattern: "**/api/queries/processlogWithItem"
-    - apiQueriesDataAlerts:
-        description: "API Endpoint to get data alerts"
-        pattern: "**/api/queries/data-alertsWithItem/*"
-    - apiQueriesTransformedLoanDetails:
-        description: "API Endpoint to get transformed loan details"
-        pattern: "**/api/queries/clients/transformed-loan-detailsWithItem"
-    - apiQueriesEncompassLoanDetails:
-        description: "API Endpoint to get encompass loan details"
-        pattern: "**/api/queries/clients/encompass-loan-detailsWithItem"
-    - apiQueriesLoans:
-        description: "API Endpoint to get loans"
-        pattern: "**/api//LoansWithItem/*"
-    - apiQueriesLoansDetails:
-        description: "API Endpoint to get loan details"
-        pattern: "**/api/queries/LoansWithItem/*/details"
 
-reconDataAlerts:
-- apiConfiguration:
-    description: Endpoint for API configuration
-    pattern: "**/api/configuration"
-- apiUserPlatformCheck:
-    description: Endpoint for user platform check
-    pattern: "**/api/user/platformCheck"
-- apiUserProfile:
-    description: Gets the user profile
-    pattern: "**/api/user/profile"
-- apiQueriesClientConstant:
-    description: Gets client constants for data alerts
-    pattern: "**/api/queries/clientConstant"
-- apiCommandsJobsStatus:
-    description: API endpoint to check job status.
-    pattern: "**/api/commands/jobs/status"
-- apiQueriesMacroAndLoanLevel:
-    description: Gets macro and loan level data
-    pattern: "**/api/queries/macro-and-loan-level"
-- apiSignalrNegotiate: null
-  description: Endpoint for SignalR negotiation
-  pattern: "**/api/signalr/negotiate"
-- apiQueriesProcIdsWithItem:
-    description: Gets process IDs
-    pattern: "**/api/queries/procIds/*"
-- apiQueriesProcessLog:
-    description: Gets process log
-    pattern: "**/api/queries/processlog"
-- apiQueriesDataAlertsWithItem:
-    description: Gets data alerts
-    pattern: "**/api/queries/data-alerts/*"
-hedgeSelectionTool:
-- apiConfiguration:
-    description: Endpoint for API configuration
-    pattern: "**/api/configuration"
-- apiUserPlatformCheck: null
-  description: Endpoint to check user platform
-  pattern: "**/api/user/platformCheck"
-- apiUserProfile: null
-  description: Endpoint to get user profile
-  pattern: "**/api/user/profile"
-- apiQueriesClientConstant: null
-  description: Endpoint to query client constants
-  pattern: "**/api/queries/clientConstant"
-- apiCommandsJobsStatus:
-    description: API endpoint to check job status.
-    pattern: "**/api/commands/jobs/status"
-- apiQueriesRiskPosition: null
-  description: Endpoint to query risk position
-  pattern: "**/api/queries/riskposition"
-- apiQueriesRiskPositionMarketMovement: null
-  description: Endpoint to query market movement for risk position
-  pattern: "**/api/queries/riskposition/marketmovement"
-- apiQueriesRiskPositionLastUpdate: null
-  description: Endpoint to get last update time for risk position
-  pattern: "**/api/queries/riskposition/lastupdate"
-- apiQueriesRiskPositionBlotterTrades: null
-  description: Endpoint to query blotter trades for risk position
-  pattern: "**/api/queries/riskposition/blottertrades"
-- apiQueriesRiskPositionBrokerDealers: null
-  description: Endpoint to query broker dealers for risk position
-  pattern: "**/api/queries/riskposition/brokerdealers"
-- apiQueriesGetBenchmarks: null
-  description: Endpoint to get benchmarks
-  pattern: "**/api/queries/get-benchmarks"
-- apiQueriesRiskPositionAssociatedTrades: null
-  description: Endpoint to query associated trades for risk position
-  pattern: "**/api/queries/riskposition/associatedtrades"
-- apiQueriesRiskPositionBrokerMarginDetails: null
-  description: Endpoint to query broker margin details for risk position
-  pattern: "**/api/queries/riskposition/brokermargindetails"
-- apiSignalrNegotiate: null
-  description: Endpoint for SignalR negotiation
-  pattern: "**/api/signalr/negotiate"
-- apiQueriesProcIdsWithItem: null
-  description: Endpoint to get process IDs with item
-  pattern: "**/api/queries/procIds/*"
-- apiQueriesProcessLog: null
-  description: Endpoint to get process log
-  pattern: "**/api/queries/processlog"
-- apiQueriesDataAlertsWithItem: null
-  description: Endpoint to query data alerts with item
-  pattern: "**/api/queries/data-alerts/*"
-hstTradeManagement:
-- apiConfiguration:
-    description: Endpoint for API configuration
-    pattern: "**/api/configuration"
-- apiUserPlatformCheck:
-    description: ""
-    pattern: "**/api/user/platformCheck"
-- apiUserProfile:
-    description: ""
-    pattern: "**/api/user/profile"
-- apiQueriesClientConstant:
-    description: ""
-    pattern: "**/api/queries/clientConstant"
-- apiCommandsJobsStatus:
-    description: API endpoint to check job status.
-    pattern: "**/api/commands/jobs/status"
-- apiQueriesHedgeTradeManagementData:
-    description: ""
-    pattern: "**/api/queries/hedge/trademanagment/get-trade-management-data"
-- apiQueriesProcIdsWithItem:
-    description: ""
-    pattern: "**/api/queries/procIds/*"
-- apiQueriesProcessLog:
-    description: ""
-    pattern: "**/api/queries/processlog"
-- apiQueriesDataAlertsWithItem:
-    description: ""
-    pattern: "**/api/queries/data-alerts/*"
-- apiQueriesHedgeTradeManagementAssociations:
-    description: ""
-    pattern: "**/api/Queries/hedge/trademanagement/associations"
-hstTradeManagementTradeDetails:
-- apiConfiguration:
-    description: Endpoint for API configuration
-    pattern: "**/api/configuration"
-- apiUserPlatformCheck:
-    description: ""
-    pattern: "**/api/user/platformCheck"
-- apiUserProfile:
-    description: ""
-    pattern: "**/api/user/profile"
-- apiQueriesClientConstant:
-    description: ""
-    pattern: "**/api/queries/clientConstant"
-- apiCommandsJobsStatus:
-    description: API endpoint to check job status.
-    pattern: "**/api/commands/jobs/status"
-- apiQueriesHedgeTradeManagementTradeDetails:
-    description: ""
-    pattern: "**/api/queries/hedge/trademanagement/tradedetails/*"
-- apiQueriesProcessLog:
-    description: ""
-    pattern: "**/api/queries/processlog"
-- apiQueriesDataAlertsWithItem:
-    description: ""
-    pattern: "**/api/queries/data-alerts/*"
-hstTradeConfirmations:
-- apiConfiguration:
-    description: Endpoint for API configuration
-    pattern: "**/api/configuration"
-- apiUserPlatformCheck:
-    description: ""
-    pattern: "**/api/user/platformCheck"
-- apiUserProfile:
-    description: ""
-    pattern: "**/api/user/profile"
-- apiQueriesClientConstant:
-    description: ""
-    pattern: "**/api/queries/clientConstant"
-- apiCommandsJobsStatus:
-    description: API endpoint to check job status.
-    pattern: "**/api/commands/jobs/status"
-- apiQueriesHedgeTradeConfirmationAvailableConfirm:
-    description: ""
-    pattern: "**/api/queries/hedge/tradeconfirmation/availableconfirm"
-- apiQueriesProcIdsWithItem:
-    description: ""
-    pattern: "**/api/queries/procIds/*"
-- apiQueriesProcessLog:
-    description: ""
-    pattern: "**/api/queries/processlog"
-- apiQueriesDataAlertsWithItem:
-    description: ""
-    pattern: "**/api/queries/data-alerts/*"
-loanSalesRequestBids:
-- apiConfiguration:
-    description: Endpoint for API configuration
-    pattern: "**/api/configuration"
-- apiUserPlatformCheck:
-    description: >
-      "User platform check endpoint. This endpoint is used to check the platform of the user accessing the web application."
-- apiUserProfile:
-    description: >
-      "User profile endpoint. This endpoint is used to retrieve the profile information of the user."
-- apiQueriesClientConstant:
-    description: >
-      "Client constant queries endpoint. This endpoint is used to query the constant values related to the clients."
-- apiCommandsJobsStatus:
-    description: API endpoint to check job status.
-    pattern: "**/api/commands/jobs/status"
-- apiQueriesRequestBidDetails:
-    description: >
-      "Request bid details queries endpoint. This endpoint is used to query the details of the bid requests."
-- apiQueriesLoanFilters:
-    description: >
-      "Loan filters lookups queries endpoint. This endpoint is used to query the lookup values for loan filters."
-- apiQueriesProcIdsWithItem:
-    description: >
-      "Proc IDs queries endpoint. This endpoint is used to query the process IDs with specific items."
-- apiQueriesProcessLog:
-    description: >
-      "Process log queries endpoint. This endpoint is used to query the log of the processes in the web application."
-- apiQueriesDataAlertsWithItem:
-    description: >
-      "Data alerts queries endpoint. This endpoint is used to query the data alerts with specific items."
-- apiCommandsCommitLoansHasBidRequestedOnLoans:
-    description: >
-      "Check if bid has been requested on loans. This endpoint is used to check if a bid has been requested on loans."
-- apiCommandsRequestBidCreate:
-    description: >
-      "Create a bid request. This endpoint is used to create a bid request in the web application."
-createRatesheet:
-- apiConfiguration:
-  description: Endpoint for API configuration
-  pattern: "**/api/configuration"
-- apiUserPlatformCheck:
-  description: API endpoint to check user platform.
-  pattern: "**/api/user/platformCheck"
-- apiUserProfile:
-    description: API endpoint to retrieve user profile.
-  pattern: "**/api/user/profile"
-- apiQueriesClientConstant:
-  description: API endpoint to query client constants.
-  pattern: "**/api/queries/clientConstant"
-- apiCommandsJobsStatus:
-  description: API endpoint to check job status.
-  pattern: "**/api/commands/jobs/status"
-- apiQueriesRatesheetReconciliationPrior:
-  description: API endpoint to query ratesheet reconciliation prior.
-  pattern: "**/api/queries/ratesheet/reconciliation/prior"
-- apiQueriesRatesheetReconciliationPriorRatesheetDetail:
-  description: API endpoint to query ratesheet reconciliation prior ratesheet detail.
-  pattern: "**/api/queries/ratesheet/reconciliation/priorratesheetdetail"
-- apiSignalrNegotiate: null
-  description: Endpoint for SignalR negotiation
-  pattern: "**/api/signalr/negotiate"
-- apiQueriesProcIdsWithItem:
-  description: API endpoint to query process IDs with item.
-  pattern: "**/api/queries/procIds/*"
-- apiQueriesProcessLog:
-  description: API endpoint to query process log.
-  pattern: "**/api/queries/processlog"
-- apiQueriesRatesheetReconciliationSettings:
-  description: API endpoint to query ratesheet reconciliation settings.
-  pattern: "**/api/queries/ratesheet/reconciliation/settings"
-- apiQueriesRatesheetReconciliationRatesheetDetailAfterJob:
-  description: API endpoint to query ratesheet reconciliation ratesheet detail after job.
-  pattern: "**/api/queries/ratesheet/reconciliation/ratesheetdetailAfterJob"
-- apiQueriesDataAlertsWithItem:
-  description: API endpoint to query data alerts with item.
-  pattern: "**/api/queries/data-alerts/*"
-dataDataImport:
-- apiConfiguration:
-    description: Endpoint for API configuration
-    pattern: "**/api/configuration"
-- apiUserPlatformCheck:
-    description: Endpoint to verify user platform
-    pattern: "**/api/user/platformCheck"
-- apiUserProfile:
-    description: Endpoint to retrieve user profile
-    pattern: "**/api/user/profile"
-- apiQueriesClientConstant:
-    description: Endpoint to query client constants
-    pattern: "**/api/queries/clientConstant"
-- apiCommandsJobsStatus:
-    description: API endpoint to check job status.
-    pattern: "**/api/commands/jobs/status"
-- apiQueriesDataImportBridgeLosFieldIds:
-    description: Endpoint to query bridge LOS field IDs for data import
-    pattern: "**/api/queries/data/dataimport/bridge-los-field-ids"
-- apiQueriesAdminLosConfiguration:
-    description: Endpoint to query admin LOS configuration
-    pattern: "**/api/queries/admin/losconfiguration"
-- apiQueriesDataImportStandardFields:
-    description: Endpoint to query standard fields for data import
-    pattern: "**/api/queries/data/dataimport/standardfields"
-- apiQueriesDataImportStandardFieldConstants:
-    description: Endpoint to query constants for standard fields in data import
-    pattern: "**/api/queries/data/dataimport/standardfieldconstants"
-- apiSignalrNegotiate: null
-  description: Endpoint for SignalR negotiation
-  pattern: "**/api/signalr/negotiate"
-- apiQueriesProcIdsWithItem:
-    description: Endpoint to query process IDs with item
-    pattern: "**/api/queries/procIds/*"
-- apiQueriesProcessLog:
-    description: Endpoint to query process log
-    pattern: "**/api/queries/processlog"
-- apiQueriesDataAlertsWithItem:
-    description: Endpoint to query data alerts with item
-    pattern: "**/api/queries/data-alerts/*"
-- apiQueriesDataImportCustomFields:
-    description: Endpoint to query custom fields for data import
-    pattern: "**/api/queries/data/dataimport/customfields"
-- apiQueriesDataImportFieldsList:
-    description: Endpoint to query list of fields for data import
-    pattern: "**/api/queries/data/dataimport/fieldslist"
-- apiQueriesDataImportEligibilityFields:
-    description: Endpoint to query eligibility fields for data import
-    pattern: "**/api/queries/data/dataimport/eligibilityfields"
-- apiQueriesDataImportWriteback:
-    description: Endpoint to query writeback data for data import
-    pattern: "**/api/queries/data/dataimport/writeback"
+```json
+[
+    {
+        "name": "Product Code",
+        "selector": "hp-loan-summary > div > div > div > div > div > label:nth-child(2)",
+        "path": "$.loanDetail.primaryData.productCode"
+    },
+    {
+        "name": "Channel",
+        "selector": "hp-loan-summary > div > div > div > div > div:nth-of-type(2) > label:nth-child(2)",
+        "path": "$.loanDetail.primaryData.channel"
+    },
+    {
+    "name": "Loan Amount",
+    "selector": "hp-loan-summary > div > div > div > div:nth-of-type(2) > div > label:nth-child(2)",
+    "path": "$.loanDetail.primaryData.amount"
+},
+{
+    "name": "Property Occupancy",
+    "selector": "hp-loan-summary > div > div > div > div:nth-of-type(2) > div:nth-of-type(2) > label:nth-child(2)",
+    "path": "$.loanDetail.primaryData.propOcc"
+},
+{
+    "name": "Note Rate",
+    "selector": "hp-loan-summary > div > div > div > div:nth-of-type(3) > div > label:nth-child(2)",
+    "path": "$.loanDetail.primaryData.noteRate"
+},
+{
+    "name": "Property Type",
+    "selector": "hp-loan-summary > div > div > div > div:nth-of-type(3) > div:nth-of-type(2) > label:nth-child(2)",
+    "path": "$.loanDetail.primaryData.propType"
+},
+{
+    "name": "Loan Purpose",
+    "selector": "hp-loan-summary > div > div > div > div:nth-of-type(4) > div > label:nth-child(2)",
+    "path": "$.loanDetail.primaryData.purpose"
+},
+{
+    "name": "Property Units",
+    "selector": "hp-loan-summary > div > div > div > div:nth-of-type(4) > div:nth-of-type(2) > label:nth-child(2)",
+    "path": "$.loanDetail.primaryData.propUnits"
+},
+{
+    "name": "Current Stage",
+    "selector": "hp-loan-summary > div > div > div > div:nth-of-type(5) > div > label:nth-child(2)",
+    "path": "$.loanDetail.status.historyRecords[?(@.stage)].stage"
+},
+{
+    "name": "Property State",
+    "selector": "hp-loan-summary > div > div > div > div:nth-of-type(5) > div:nth-of-type(2) > label:nth-child(2)",
+    "path": "$.loanDetail.primaryData.propState"
+},
+{
+    "name": "FICO Score",
+    "selector": "hp-loan-summary > div > div > div > div:nth-of-type(6) > div > label:nth-child(2)",
+    "path": "$.loanDetail.primaryData.fico"
+},
+{
+    "name": "Refinance Type",
+    "selector": "hp-loan-summary > div > div > div > div:nth-of-type(6) > div:nth-of-type(2) > label:nth-child(2)",
+    "path": "$.loanDetail.primaryData.refiType"
+},
+{
+    "name": "LTV Ratio",
+    "selector": "hp-loan-summary > div > div > div > div:nth-of-type(7) > div > label:nth-child(2)",
+    "path": "$.loanDetail.primaryData.ltv"
+},
+{
+    "name": "Loan Status",
+    "selector": "hp-loan-summary > div > div > div > div:nth-of-type(7) > div:nth-of-type(2) > label:nth-child(2)",
+    "path": "$.loanDetail.primaryData.status"
+},
+{
+    "name": "CLTV Ratio",
+    "selector": "hp-loan-summary > div > div > div > div:nth-of-type(8) > div > label:nth-child(2)",
+    "path": "$.loanDetail.primaryData.cltv"
+}
+]
+```
+
+```json
+[
+    {
+        "name": "Lock Date",
+        "selector": "hp-loan-supplemental-data > div > div > div > div > div > label:nth-child(2)",
+        "value": "2/15/2024"
+    },
+    {
+        "name": "Lender Acquisition Cost",
+        "selector": "hp-loan-supplemental-data > div > div > div > div > div:nth-of-type(2) > label:nth-child(2)",
+        "value": "101.532"
+    },
+    {
+        "name": "Lock Expiration Date",
+        "selector": "hp-loan-supplemental-data > div > div > div > div:nth-of-type(2) > div > label:nth-child(2)",
+        "value": "3/18/2024"
+    },
+    {
+        "name": "Lender Profit Margin",
+        "selector": "hp-loan-supplemental-data > div > div > div > div:nth-of-type(2) > div:nth-of-type(2) > label:nth-child(2)",
+        "value": "1.192"
+    },
+    {
+        "name": "Estimated Fund Date",
+        "selector": "hp-loan-supplemental-data > div > div > div > div:nth-of-type(3) > div > label:nth-child(2)",
+        "value": "4/23/2024"
+    },
+    {
+        "name": "Secondary Cost",
+        "selector": "hp-loan-supplemental-data > div > div > div > div:nth-of-type(3) > div:nth-of-type(2) > label:nth-child(2)",
+        "value": "102.724"
+    },
+    {
+        "name": "Loan Funded Date",
+        "selector": "hp-loan-supplemental-data > div > div > div > div:nth-of-type(4) > div > label:nth-child(2)",
+        "value": "3/07/2024"
+    },
+    {
+        "name": "Allocation Date",
+        "selector": "hp-loan-supplemental-data > div > div > div > div:nth-of-type(5) > div > label:nth-child(2)",
+        "value": "3/14/2024"
+    },
+    {
+        "name": "Purchased Date",
+        "selector": "hp-loan-supplemental-data > div > div > div > div:nth-of-type(6) > div > label:nth-child(2)",
+        "value": "3/20/2024"
+    },
+    {
+        "name": "Shipped to Investor Date",
+        "selector": "hp-loan-supplemental-data > div > div > div > div:nth-of-type(7) > div > label:nth-child(2)",
+        "value": ""
+    },
+    {
+        "name": "Pool/Commitment Number",
+        "selector": "hp-loan-supplemental-data > div > div > div > div:nth-of-type(8) > div > label:nth-child(2)",
+        "value": ""
+    },
+
+
+
+
+
+    {
+        "name": "Lock Date",
+        "selector": "hp-loan-supplemental-data > div > div > div > div > div > label:nth-child(2)",
+        "value": "2/15/2024",
+        "path": "$.loanDetail.supplementalData.lockDate"
+    },
+    {
+        "name": "Lender Acquisition Cost",
+        "selector": "hp-loan-supplemental-data > div > div > div > div > div:nth-of-type(2) > label:nth-child(2)",
+        "value": "101.532",
+        "path": "$.loanDetail.supplementalData.lenderAcquisitionCost"
+    },
+    {
+        "name": "Lock Expiration Date",
+        "selector": "hp-loan-supplemental-data > div > div > div > div:nth-of-type(2) > div > label:nth-child(2)",
+        "value": "3/18/2024",
+        "path": "$.loanDetail.supplementalData.lockExpirationDate"
+    },
+    {
+        "name": "Lender Profit Margin",
+        "selector": "hp-loan-supplemental-data > div > div > div > div:nth-of-type(2) > div:nth-of-type(2) > label:nth-child(2)",
+        "value": "1.192",
+        "path": "$.loanDetail.supplementalData.lenderProfitMargin"
+    },
+    {
+        "name": "Estimated Fund Date",
+        "selector": "hp-loan-supplemental-data > div > div > div > div:nth-of-type(3) > div > label:nth-child(2)",
+        "value": "4/23/2024",
+        "path": "$.loanDetail.supplementalData.estimatedFundDate"
+    },
+    {
+        "name": "Secondary Cost",
+        "selector": "hp-loan-supplemental-data > div > div > div > div:nth-of-type(3) > div:nth-of-type(2) > label:nth-child(2)",
+        "value": "102.724",
+        "path": "$.loanDetail.supplementalData.secondaryCost"
+    },
+    {
+        "name": "Loan Funded Date",
+        "selector": "hp-loan-supplemental-data > div > div > div > div:nth-of-type(4) > div > label:nth-child(2)",
+        "value": "3/07/2024",
+        "path": "$.loanDetail.supplementalData.loanFundedDate"
+    },
+    {
+        "name": "Allocation Date",
+        "selector": "hp-loan-supplemental-data > div > div > div > div:nth-of-type(5) > div > label:nth-child(2)",
+        "value": "3/14/2024",
+        "path": "$.loanDetail.supplementalData.allocationDate"
+    },
+    {
+        "name": "Purchased Date",
+        "selector": "hp-loan-supplemental-data > div > div > div > div:nth-of-type(6) > div > label:nth-child(2)",
+        "value": "3/20/2024",
+        "path": "$.loanDetail.supplementalData.purchasedDate"
+    },
+    {
+        "name": "Shipped to Investor Date",
+        "selector": "hp-loan-supplemental-data > div > div > div > div:nth-of-type(7) > div > label:nth-child(2)",
+        "value": "",
+        "path": "$.loanDetail.supplementalData.shippedToInvestorDate"
+    },
+    {
+        "name": "Pool/Commitment Number",
+        "selector": "hp-loan-supplemental-data > div > div > div > div:nth-of-type(8) > div > label:nth-child(2)",
+        "value": "",
+        "path": "$.loanDetail.supplementalData.poolCommitmentNumber"
+    }
+]
+```
